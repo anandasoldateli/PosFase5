@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Dados do Datathon
+data/*.xlsx
+data/*.xls
+data/*.csv
+
+# Arquivos de dados locais
+data/raw/
+data/processed/
+
+# Arquivos temporários
+*.tmp
+*.temp
