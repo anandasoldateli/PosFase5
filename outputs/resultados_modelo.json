@@ -1,0 +1,361 @@
+{
+  "alvo": "redução de D (fase efetiva − fase ideal) no ano seguinte, fases 0–7",
+  "populacao": "alunos presentes em t e t+1; previsão condicional à permanência na base",
+  "pares_treino": 600,
+  "pares_teste": 706,
+  "prevalencia_treino": 0.17333333333333334,
+  "prevalencia_teste": 0.18413597733711048,
+  "decomposicao_evento": {
+    "2022→2023": {
+      "Agravamento (já defasado)": 38,
+      "Entrada em defasagem": 60,
+      "Perda de vantagem (continua em fase)": 6,
+      "Sem evento": 496
+    },
+    "2023→2024": {
+      "Agravamento (já defasado)": 30,
+      "Entrada em defasagem": 84,
+      "Perda de vantagem (continua em fase)": 16,
+      "Sem evento": 576
+    }
+  },
+  "promocao_x_evento": {
+    "nao_promovidos": 389,
+    "nao_promovidos_sem_evento": 157,
+    "promovidos": 917,
+    "promovidos_com_evento": 2
+  },
+  "modelo_escolhido": "Random Forest (folha ≥ 20) + calibração sigmoide",
+  "selecao_cv": [
+    {
+      "modelo": "Random Forest (folha ≥ 20)",
+      "ROC-AUC (CV)": 0.8323898883374691,
+      "AP (CV)": 0.48622601818589833,
+      "Brier (CV)": 0.114394208510358
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 5)",
+      "ROC-AUC (CV)": 0.830761476426799,
+      "AP (CV)": 0.5443693306753659,
+      "Brier (CV)": 0.11007335675308409
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 10)",
+      "ROC-AUC (CV)": 0.8285902605459057,
+      "AP (CV)": 0.5109842973575408,
+      "Brier (CV)": 0.11220734840725617
+    },
+    {
+      "modelo": "Gradient Boosting",
+      "ROC-AUC (CV)": 0.8255660669975186,
+      "AP (CV)": 0.527581775099387,
+      "Brier (CV)": 0.1128930091108834
+    },
+    {
+      "modelo": "Regressão Logística",
+      "ROC-AUC (CV)": 0.8206226736972705,
+      "AP (CV)": 0.46921317631755294,
+      "Brier (CV)": 0.11505214587715325
+    },
+    {
+      "modelo": "Baseline: só defasagem atual",
+      "ROC-AUC (CV)": 0.7353539857320099,
+      "AP (CV)": 0.3236228057656629,
+      "Brier (CV)": null
+    }
+  ],
+  "teste": [
+    {
+      "modelo": "Regressão Logística",
+      "ROC-AUC": 0.8252136752136752,
+      "AP": 0.5366141314605687,
+      "Brier": 0.11542539305237372
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 5)",
+      "ROC-AUC": 0.8697115384615384,
+      "AP": 0.6018470002003374,
+      "Brier": 0.10924837903759756
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 10)",
+      "ROC-AUC": 0.8616720085470086,
+      "AP": 0.6322241109305505,
+      "Brier": 0.10994289064206077
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 20)",
+      "ROC-AUC": 0.8658520299145298,
+      "AP": 0.6622742367419786,
+      "Brier": 0.11261880391513644
+    },
+    {
+      "modelo": "Gradient Boosting",
+      "ROC-AUC": 0.8147235576923076,
+      "AP": 0.5382222005441134,
+      "Brier": 0.11944088158989132
+    },
+    {
+      "modelo": "Random Forest (folha ≥ 20) + calibração (escolhido)",
+      "ROC-AUC": 0.8658520299145298,
+      "AP": 0.6622742367419786,
+      "Brier": 0.10323207710254223
+    },
+    {
+      "modelo": "Baseline: só defasagem atual",
+      "ROC-AUC": 0.7256343482905984,
+      "AP": 0.32865629769355276,
+      "Brier": null
+    },
+    {
+      "modelo": "Referência: prevalência do treino",
+      "ROC-AUC": 0.5,
+      "AP": 0.18413597733711048,
+      "Brier": 0.15034661630468998
+    }
+  ],
+  "teste_modelo_escolhido": {
+    "roc_auc": 0.8658520299145298,
+    "roc_auc_ic95": [
+      0.8305430945199785,
+      0.8989526255350611
+    ],
+    "ap": 0.6622742367419786,
+    "ap_ic95": [
+      0.5804640199291152,
+      0.7398897457535709
+    ],
+    "brier": 0.10323207710254223,
+    "brier_sem_calibracao": 0.11261880391513644
+  },
+  "limiar_alto": 0.20325286279402435,
+  "limiar_medio": 0.1060887601654669,
+  "metricas_alto": {
+    "limiar": 0.20325286279402435,
+    "precisão": 0.5083798882681564,
+    "recall": 0.7,
+    "F1": 0.5889967637540453,
+    "VP": 91,
+    "FP": 88,
+    "FN": 39,
+    "VN": 488,
+    "alunos sinalizados": 179
+  },
+  "metricas_medio": {
+    "limiar": 0.1060887601654669,
+    "precisão": 0.36451612903225805,
+    "recall": 0.8692307692307693,
+    "F1": 0.5136363636363637,
+    "VP": 113,
+    "FP": 197,
+    "FN": 17,
+    "VN": 379,
+    "alunos sinalizados": 310
+  },
+  "captura_top": [
+    {
+      "acompanhar top": "10% (71 alunos)",
+      "eventos capturados": 55,
+      "% do total de eventos": 42.30769230769231,
+      "precisão no grupo": 77.46478873239437,
+      "lift vs aleatório": 4.206933911159263
+    },
+    {
+      "acompanhar top": "20% (141 alunos)",
+      "eventos capturados": 81,
+      "% do total de eventos": 62.30769230769231,
+      "precisão no grupo": 57.446808510638306,
+      "lift vs aleatório": 3.1198036006546648
+    },
+    {
+      "acompanhar top": "30% (212 alunos)",
+      "eventos capturados": 95,
+      "% do total de eventos": 73.07692307692307,
+      "precisão no grupo": 44.81132075471698,
+      "lift vs aleatório": 2.433599419448476
+    }
+  ],
+  "calibracao_por_fase": [
+    {
+      "fase": "ALFA",
+      "alunos": 174,
+      "observado": 0.3735632183908046,
+      "previsto": 0.3184172603553203,
+      "diferença (p.p.)": -5.514595803548428
+    },
+    {
+      "fase": "Fase 1",
+      "alunos": 138,
+      "observado": 0.15942028985507245,
+      "previsto": 0.13683375922871738,
+      "diferença (p.p.)": -2.2586530626355072
+    },
+    {
+      "fase": "Fase 2",
+      "alunos": 153,
+      "observado": 0.0196078431372549,
+      "previsto": 0.10689119982486364,
+      "diferença (p.p.)": 8.728335668760874
+    },
+    {
+      "fase": "Fase 3",
+      "alunos": 94,
+      "observado": 0.13829787234042554,
+      "previsto": 0.12198512294955505,
+      "diferença (p.p.)": -1.631274939087049
+    },
+    {
+      "fase": "Fase 4",
+      "alunos": 67,
+      "observado": 0.07462686567164178,
+      "previsto": 0.10428196527730697,
+      "diferença (p.p.)": 2.9655099605665187
+    },
+    {
+      "fase": "Fase 5",
+      "alunos": 43,
+      "observado": 0.3488372093023256,
+      "previsto": 0.11261310651757425,
+      "diferença (p.p.)": -23.622410278475133
+    },
+    {
+      "fase": "Fase 6",
+      "alunos": 17,
+      "observado": 0.0,
+      "previsto": 0.058650238464332406,
+      "diferença (p.p.)": 5.865023846433241
+    },
+    {
+      "fase": "Fase 7",
+      "alunos": 20,
+      "observado": 0.35,
+      "previsto": 0.08994231876969928,
+      "diferença (p.p.)": -26.00576812303007
+    }
+  ],
+  "importancia_permutacao": {
+    "idade": 0.0868,
+    "defasagem": 0.0317,
+    "IPV": 0.0265,
+    "idade_relativa_fase": 0.0203,
+    "IDA": 0.008,
+    "anos_no_programa": 0.0078,
+    "mat": 0.0058,
+    "por": 0.0047,
+    "fase": 0.0035,
+    "inde": 0.0017,
+    "IEG": 0.0001,
+    "IAA": -0.0008,
+    "genero_feminino": -0.0015,
+    "escola_publica": -0.002
+  },
+  "composicao_faixa_alto": {
+    "Sem evento": 88,
+    "Entrada em defasagem": 81,
+    "Agravamento (já defasado)": 9,
+    "Perda de vantagem (continua em fase)": 1
+  },
+  "robustez": [
+    {
+      "análise": "Teste completo",
+      "n": 706,
+      "prevalência": 0.18413597733711048,
+      "ROC-AUC": 0.8658520299145298
+    },
+    {
+      "análise": "Só alunos novos (fora do treino)",
+      "n": 255,
+      "prevalência": 0.3411764705882353,
+      "ROC-AUC": 0.890462506841817
+    },
+    {
+      "análise": "Só alunos já vistos no treino",
+      "n": 451,
+      "prevalência": 0.09534368070953436,
+      "ROC-AUC": 0.7701208390332878
+    },
+    {
+      "análise": "Direção inversa (treina 23→24, testa 22→23)",
+      "n": 600,
+      "prevalência": 0.17333333333333334,
+      "ROC-AUC": 0.8433428970223324
+    }
+  ],
+  "sensibilidade_regra_2024": {
+    "rotulos_alterados_teste": 69,
+    "eventos_fonte": 130,
+    "eventos_regra": 159,
+    "roc_auc_rotulos_regra": 0.7829211364446438,
+    "ic95_auc_rotulos_regra": [
+      0.7462080674433581,
+      0.8197168652515758
+    ]
+  },
+  "sensibilidade_atributos": [
+    {
+      "variante": "Especificação adotada",
+      "ROC-AUC (CV treino)": 0.8323898883374691,
+      "ROC-AUC (teste)": 0.8658520299145298,
+      "prevalência teste": 0.18413597733711048,
+      "n teste": 706.0
+    },
+    {
+      "variante": "IAA com zeros da fonte",
+      "ROC-AUC (CV treino)": 0.8325062034739454,
+      "ROC-AUC (teste)": 0.8649305555555555,
+      "prevalência teste": 0.18413597733711048,
+      "n teste": 706.0
+    },
+    {
+      "variante": "Sem IAA",
+      "ROC-AUC (CV treino)": 0.8323511166253101,
+      "ROC-AUC (teste)": 0.8640157585470086,
+      "prevalência teste": 0.18413597733711048,
+      "n teste": 706.0
+    },
+    {
+      "variante": "Sem INDE",
+      "ROC-AUC (CV treino)": 0.8346968052109182,
+      "ROC-AUC (teste)": 0.8605502136752137,
+      "prevalência teste": 0.18413597733711048,
+      "n teste": 706.0
+    },
+    {
+      "variante": "Com IPS (padronizado no ano)",
+      "ROC-AUC (CV treino)": 0.8279892990074442,
+      "ROC-AUC (teste)": 0.8649439102564103,
+      "prevalência teste": 0.18413597733711048,
+      "n teste": 706.0
+    },
+    {
+      "variante": "Alvo anterior (queda IDA ≥ 0,5 ou redução de D)",
+      "ROC-AUC (CV treino)": 0.6783721693468985,
+      "ROC-AUC (teste)": 0.5924290780141843,
+      "prevalência teste": 0.5865102639296188,
+      "n teste": 682.0
+    }
+  ],
+  "modelo_final": {
+    "cv_agrupada": {
+      "roc_auc": 0.8694468363311647,
+      "ap": 0.5763131662623286,
+      "brier": 0.1037162537929306,
+      "n": 1306
+    },
+    "limiar_medio": 0.12362936787576471,
+    "limiar_alto": 0.17457798400013247,
+    "alunos_2024_por_faixa": {
+      "Baixo": 546,
+      "Alto": 367,
+      "Médio": 141
+    },
+    "n_alunos_2024": 1054
+  },
+  "limitacoes": [
+    "Probabilidade condicional a o aluno aparecer na base do ano seguinte; não estima risco de saída.",
+    "Evento = redução de D (fase efetiva − fase ideal); inclui entrada em defasagem, agravamento e perda de vantagem.",
+    "A regra de fase ideal de 2024 difere da de 2022/23 em 301 registros; ver sensibilidade.",
+    "A calibração varia por fase (ex.: Fase 5 subestimada no teste); use a faixa e a ordenação, não o valor exato.",
+    "Modelo final retreinado sem teste futuro; usar indicadores do fechamento do ano anterior."
+  ]
+}
