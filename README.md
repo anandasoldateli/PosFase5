@@ -1,97 +1,89 @@
-# Datathon Passos Mágicos — Fase 5
+# Datathon Passos Mágicos — POSTECH Data Analytics, Fase 5
 
-## Sobre o projeto
+Análise dos dados da PEDE (Pesquisa Extensiva do Desenvolvimento Educacional) de 2022 a 2024 da Associação Passos Mágicos. O projeto responde às 11 perguntas do Datathon e inclui um modelo preditivo do risco de **redução de D = fase efetiva − fase ideal** no ano seguinte, ou seja, de piora da adequação de nível.
 
-Projeto desenvolvido para o Datathon da Fase 5 da Pós-Tech, utilizando dados da Associação Passos Mágicos.
+## Principais resultados
 
-O objetivo é aplicar técnicas de análise de dados e modelagem preditiva para identificar padrões relacionados ao desempenho, desenvolvimento e trajetória dos estudantes, gerando informações que possam apoiar decisões da organização.
+Resultados observacionais: associação não implica causalidade.
 
-## Objetivos
+| Tema | Resultado |
+|---|---|
+| Defasagem (Q1) | Alunos em fase na fonte: 30,1% (2022) → 53,8% (2024). Nos mesmos 468 alunos, D < 0 cai de 67,3% para 34,8% pela fonte, ou para 47,4% aplicando em 2024 a regra idade → fase de 2022/23. |
+| Desempenho (Q2) | IDA sobe em 2023 (6,66) e cai em 2024 (6,35). A Fase 3 tem a menor média nos três anos. |
+| INDE (Q8) | A fórmula oficial é reproduzida (R² = 1,000). O IDA tem o maior espaço aritmético de ganho. |
+| Modelo (Q9) | Random Forest calibrado: ROC-AUC 0,866 (IC 95% 0,831–0,899) no teste temporal 2023→24. Os 10% de maior risco concentram 42% dos eventos. |
+| Pedras (Q10) | Nos mesmos alunos, o INDE fica estável, exceto no grupo Quartzo. A distribuição agregada também reflete quem deixa de aparecer na base. |
 
-A análise busca investigar:
+A síntese completa, gerada a partir dos dados, está em [`outputs/resultados_q1_q11.md`](outputs/resultados_q1_q11.md). O documento Word é gerado em `outputs/`.
 
-- a defasagem escolar dos estudantes e sua evolução ao longo dos anos;
-- a evolução do desempenho acadêmico;
-- as relações entre desempenho, engajamento e desenvolvimento;
-- a relação entre autopercepção e indicadores de desempenho;
-- possíveis padrões psicossociais associados à queda de desempenho ou engajamento;
-- a relação entre avaliações psicopedagógicas e defasagem escolar;
-- os fatores relacionados à variação do índice de vulnerabilidade;
-- combinações de indicadores associadas ao desenvolvimento dos estudantes;
-- padrões que possam identificar estudantes em situação de risco antes de uma queda de desempenho;
-- a efetividade dos diferentes programas da Associação.
-
-## Dados
-
-O projeto utiliza a base de dados disponibilizada para o Datathon, contemplando informações dos estudantes dos anos de 2022, 2023 e 2024.
-
-Os dados originais não são versionados neste repositório.
-
-## Estrutura do projeto
+## Estrutura
 
 ```text
 PosFase5/
 ├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
+│   ├── BASE DE DADOS PEDE 2024 - DATATHON.xlsx   # fonte (não versionada)
+│   └── processed/                                # gerado pelo pipeline (não versionado)
 ├── src/
+│   ├── config.py          # caminhos e constantes (pesos do INDE, pedras)
+│   ├── preparacao.py      # leitura, harmonização, campos analíticos e contratos da base
+│   ├── analises.py        # Q1–Q8, Q10 e Q11 → tabelas, figuras e JSON
+│   ├── features.py        # alvo, atributos e validação de entrada (notebook e app)
+│   ├── graficos.py        # estilo único das figuras
+│   ├── consolidacao.py    # gera outputs/resultados_q1_q11.md a partir dos JSON
+│   └── documento.py       # gera o documento Word da síntese (Q1–Q11)
+├── notebooks/
+│   └── modelo_risco_defasagem.ipynb   # Q9: alvo, atributos, split, modelagem, avaliação, sensibilidades
+├── models/
+│   └── modelo_risco_defasagem.joblib  # modelo final calibrado + limiares + limitações
 ├── outputs/
-├── docs/
-├── .gitignore
-└── README.md
+│   ├── figuras/            # PNG usados no documento e na apresentação
+│   ├── tabelas/            # CSV de cada análise
+│   ├── resultados_analises.json
+│   ├── resultados_modelo.json
+│   ├── resultados_q1_q11.md
+│   └── Datathon_Passos_Magicos_Sintese_Q1_Q11.docx
+├── run_pipeline.py
+└── requirements.txt
 ```
 
-### `data/`
+## Como reproduzir
 
-Armazena os dados utilizados no projeto.
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+# copie a planilha do Datathon para data/
+python run_pipeline.py
+```
 
-- `raw/`: dados originais.
-- `processed/`: dados tratados e preparados para análise.
+O pipeline executa, em ordem: `preparacao.py` → `analises.py` → notebook do modelo → `consolidacao.py` → `documento.py`. Os arquivos com dados individuais (base longitudinal e risco por aluno) ficam em `data/processed/`, que não é versionado. A preparação interrompe a execução se houver violação de chave, domínio ou cardinalidade. Todos os números do documento vêm dos arquivos gerados; os JSON são estritos (sem `NaN`).
 
-### `notebooks/`
+## Dados e tratamentos
 
-Notebooks utilizados para exploração, análise e modelagem dos dados.
+A planilha tem uma aba por ano, com nomes e codificações diferentes entre elas. `src/preparacao.py` harmoniza e valida os dados. Os **valores da fonte são preservados** e os tratamentos analíticos ficam em colunas separadas.
 
-### `src/`
+- **INDE e Pedra do ano:** em 2023 estão em `INDE 2023`/`Pedra 2023`; as colunas `INDE 23`/`Pedra 23` dessa aba estão vazias.
+- **Códigos:** fase (`4`, `FASE 4`, `4A` → 4; ALFA → 0), gênero e tipo de escola unificados entre anos.
+- **Idade 2023:** parte está gravada como data serial do Excel; o dia da data é a idade.
+- **Fase ideal:** 2022 e 2023 seguem a mesma correspondência idade → fase ideal; em 2024, 301 registros divergem e nenhuma data de referência única reproduz a regra. A fonte é mantida; `defasagem_regra` é um cenário de sensibilidade.
+- **IEG 2024:** 101 dos 109 zeros ocorrem em registros sem nenhuma outra avaliação (Fases 8 e 9). `IEG_analise` os trata como não avaliados.
+- **IAA = 0** (39, 190 e 20 registros por ano): hipótese de não resposta, a confirmar. `IAA_analise` os trata como ausentes; o INDE oficial é mantido.
+- **IPS 2023:** distribuição muito diferente dos outros anos; causa não confirmada.
+- **Pedras:** usadas como na fonte. Os limites de INDE observados em 2022 diferem dos de 2023/24 (ver `outputs/tabelas/q10_limites_inde_por_pedra.csv`).
+- Ausência de um aluno na base do ano seguinte **não** é tratada como evasão comprovada.
 
-Códigos Python reutilizáveis desenvolvidos durante o projeto.
+## Indicadores (referência PEDE)
 
-### `outputs/`
-
-Resultados das análises, como gráficos, tabelas e outros artefatos.
-
-### `docs/`
-
-Documentação e materiais de apoio do projeto.
-
-## Etapas do projeto
-
-1. Preparação e entendimento dos dados
-2. Limpeza e tratamento dos dados
-3. Análise exploratória
-4. Análise dos indicadores
-5. Modelagem preditiva
-6. Avaliação do modelo
-7. Construção da aplicação em Streamlit
-8. Storytelling e apresentação dos resultados
-
-## Tecnologias
-
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Scikit-learn
-- Jupyter Notebook
-- Streamlit
+| Sigla | Indicador | Peso no INDE (fases 0–7) |
+|---|---|---|
+| IAN | Adequação de Nível | 10% |
+| IDA | Desempenho Acadêmico | 20% |
+| IEG | Engajamento | 20% |
+| IAA | Autoavaliação | 10% |
+| IPS | Psicossocial | 10% |
+| IPP | Psicopedagógico | 10% |
+| IPV | Ponto de Virada | 20% |
 
 ## Equipe
 
-Ananda Soares Soldateli
-Grecco Teixeira de Morais
-
----
-
-**Status:** Em desenvolvimento
+- Ananda Soares Soldateli
+- Grecco Teixeira de Morais
