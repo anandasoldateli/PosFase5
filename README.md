@@ -20,6 +20,8 @@ A síntese completa, gerada a partir dos dados, está em [`outputs/resultados_q1
 
 ```text
 PosFase5/
+├── app/
+│   └── streamlit_app.py       # aplicação Streamlit
 ├── data/
 │   ├── BASE DE DADOS PEDE 2024 - DATATHON.xlsx   # fonte (não versionada)
 │   └── processed/                                # gerado pelo pipeline (não versionado)
@@ -56,6 +58,28 @@ python run_pipeline.py
 ```
 
 O pipeline executa, em ordem: `preparacao.py` → `analises.py` → notebook do modelo → `consolidacao.py` → `documento.py`. Os arquivos com dados individuais (base longitudinal e risco por aluno) ficam em `data/processed/`, que não é versionado. A preparação interrompe a execução se houver violação de chave, domínio ou cardinalidade. Todos os números do documento vêm dos arquivos gerados; os JSON são estritos (sem `NaN`).
+
+## Aplicação Streamlit
+
+A aplicação apresenta uma interface para estimar, a partir dos indicadores informados, a faixa de risco de redução da adequação entre a fase efetiva do estudante e a fase ideal no ano seguinte.
+
+### Acesso
+
+A aplicação publicada está disponível em:
+
+https://posfase5-datathon.streamlit.app/
+
+### Execução local
+
+Com o ambiente virtual ativado:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+A aplicação utiliza o modelo calibrado armazenado em `models/modelo_risco_defasagem.joblib`.
+
+A previsão é uma ferramenta de priorização baseada nos critérios do modelo e **não constitui diagnóstico individual**.
 
 ## Dados e tratamentos
 
